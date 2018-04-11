@@ -7,15 +7,50 @@ class App extends Component {
     super(props);
 
     this.state = {
+
+      starListInput: 
+                  {name: '', diameter: ''}
+      ,
       starList: [ {name: 'Hadar', diameter: '100000000'},
                   {name: 'Gacrux', diameter: '1010010100100'},
-                  {name: 'Kochab', diameter: '101200129412000'}
+                  {name: 'Kochab', diameter: '101200129412000'},
     ],
 
       planetList: ['Gravytrap','Ghostsphere','Crabrock']
     }//end this.state
 
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   }//end constructor
+
+  handleChangeFor = (propertyName) => {
+    //this is a function that returns a function
+    return (event) => {
+      // myObj.somthing.somethingElse
+      // myObj["something"]["somethingElse"]
+      this.setState({
+        starListInput: {
+          ...this.state.starListInput,
+          [propertyName]: event.target.value,
+        }
+      });
+    }
+  }
+
+  handleSubmit(event) {
+
+    event.preventDefault();
+    this.setState({
+      starList: [
+         ...this.state.starList,
+         {name: this.state.starListInput.name, diameter: this.state.starListInput.diameter}
+      ],
+      starListInput: {
+        name: '',
+        diameter: ''
+      }
+    })
+  }
 
   render() {
 
@@ -37,6 +72,13 @@ class App extends Component {
           <pre>
    
           </pre>
+          <form onSubmit={this.handleSubmit}>
+            <input value={this.state.starListInput.name} onChange={this.handleChangeFor("name")} placeholder='name' />
+            <input value={this.state.starListInput.diameter} onChange={this.handleChangeFor("diameter")} placeholder='diameter' />
+
+            <input type="submit" value="Submit"/>
+            </form>
+
           <ul>
               {starListItemArray} 
           </ul>
